@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import ErrorScreen from "./ErrorScreen";
 import { usePathname } from "next/navigation";
+import InfoPage from "./home/page";
 
 
 // Access is allowed only if coming from a search engine or if a verified Google bot
@@ -165,7 +166,7 @@ const ReferrerProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   console.log("[ReferrerProvider] Access denied: showing error screen.");
-  return <ErrorScreen />;
+  return <InfoPage />;
 };
 
 export default ReferrerProvider;
