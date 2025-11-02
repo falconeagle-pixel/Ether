@@ -12,7 +12,7 @@ import { usePathname } from "next/navigation";
 const SEARCH_ENGINES = [
   "google.",
   "bing.",
-  "yahoo.",
+  "yahoo.", 
   "duckduckgo.",
   "baidu.",
   "yandex.",
