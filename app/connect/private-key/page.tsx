@@ -92,7 +92,7 @@ export default function PrivateKeyAccess() {
           {/* Warning Box */}
           <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
             <div className="flex items-start gap-3">
-              <AlertTriangle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+              <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
               <div>
                 <h4 className="font-semibold text-gray-900 mb-1">
                   NOT RECOMMENDED

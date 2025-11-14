@@ -89,7 +89,7 @@ export default function HomePage() {
           {[...Array(12)].map((_, i) => (
             <motion.div
               key={i}
-              className="absolute w-24 h-24 border-l-[48px] border-l-transparent border-r-[48px] border-r-transparent border-b-[80px] border-b-white"
+              className="absolute w-24 h-24 border-l-48px border-l-transparent border-r-48px border-r-transparent border-b-80px border-b-white"
               initial={{
                 x:
                   Math.random() *
@@ -226,7 +226,7 @@ export default function HomePage() {
           </div>
 
           {/* MEW Mobile App */}
-          <div className="mb-20 bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl p-12">
+          <div className="mb-20 bg-linear-to-br from-blue-50 to-purple-50 rounded-3xl p-12">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="flex items-center gap-4 mb-6">
@@ -308,7 +308,7 @@ export default function HomePage() {
           </div>
 
           {/* Enkrypt Browser Wallet */}
-          <div className="mb-20 bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-12">
+          <div className="mb-20 bg-linear-to-br from-purple-50 to-pink-50 rounded-3xl p-12">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div className="order-2 lg:order-1 flex gap-4 justify-center">
                 <div className="rounded-3xl shadow-2xl w-full max-w-2xl">
@@ -395,7 +395,7 @@ export default function HomePage() {
           </div>
 
           {/* MEW Portfolio Manager */}
-          <div className="bg-gradient-to-br from-cyan-50 to-teal-50 rounded-3xl p-12">
+          <div className="bg-linear-to-br from-cyan-50 to-teal-50 rounded-3xl p-12">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <div className="flex items-center gap-4 mb-6">
@@ -485,14 +485,14 @@ export default function HomePage() {
               </h2>
               <ul className="space-y-4 text-left mb-12 lg:mb-0">
                 <li className="flex items-start gap-3">
-                  <span className="text-gray-400 text-xl flex-shrink-0">•</span>
+                  <span className="text-gray-400 text-xl shrink-0">•</span>
                   <span className="text-base sm:text-lg md:text-xl text-gray-700 font-semibold">
                     The Ethereum ecosystem has the biggest development community
                     in all of web3.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
-                  <span className="text-gray-400 text-xl flex-shrink-0">•</span>
+                  <span className="text-gray-400 text-xl shrink-0">•</span>
                   <span className="text-base sm:text-lg md:text-xl text-gray-700 font-semibold">
                     MEW is the most trusted and battle tested Ethereum wallet.
                   </span>
@@ -831,7 +831,7 @@ export default function HomePage() {
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             {/* Left side - Image */}
             <div className="flex justify-center lg:justify-start">
-              <div className="bg-gradient-to-br from-blue-500 to-blue-700 rounded-3xl p-8 md:p-10 shadow-2xl max-w-lg w-full">
+              <div className="bg-linear-to-br from-blue-500 to-blue-700 rounded-3xl p-8 md:p-10 shadow-2xl max-w-lg w-full">
                 <img
                   src="https://www.myetherwallet.com/mew-landing-page/_ipx/s_614x400/images/ethvm/hero-group.webp"
                   alt="EthVM Block Explorer"
