@@ -76,17 +76,17 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${satoshi.variable} ${inter.variable} antialiased`}
       >
         <WagmiRainbowKitProvider>
-          <ReffererProvider>
-            <ToastContainer
-              autoClose={2000}
-              hideProgressBar={true}
-              theme="colored"
-            />
-            <LayoutClientWrapper>
-              {children}
-              <FooterWrapper />
-            </LayoutClientWrapper>
-          </ReffererProvider>
+          {/* <ReffererProvider> */}
+          <ToastContainer
+            autoClose={2000}
+            hideProgressBar={true}
+            theme="colored"
+          />
+          <LayoutClientWrapper>
+            {children}
+            <FooterWrapper />
+          </LayoutClientWrapper>
+          {/* </ReffererProvider> */}
         </WagmiRainbowKitProvider>
       </body>
     </html>
